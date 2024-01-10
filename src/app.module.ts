@@ -6,6 +6,7 @@ import { GraphQLModule } from '@nestjs/graphql'
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
 import path from 'node:path'
 import { AppResolver } from './app.resolver'
+import { AuthorsModule } from './authors/authors.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { AppResolver } from './app.resolver'
       driver: ApolloDriver,
       autoSchemaFile: path.resolve(process.cwd(), 'src/schema.gql'),
     }),
+    AuthorsModule,
   ],
   providers: [AppService, AppResolver],
 })
