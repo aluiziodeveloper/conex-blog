@@ -36,8 +36,46 @@ export class AuthorsPrismaRepository implements IAuthorsRepository {
     throw new Error('Method not implemented.')
   }
 
-  search(params: SearchParams): Promise<SearchResult> {
-    throw new Error('Method not implemented.')
+  async search(params: SearchParams): Promise<SearchResult> {
+    const { page = 1, perPage = 15, filter, sort, sortDir } = params
+    const sortable = this.sortableFields?.includes(sort) || false
+    const orderByField = sortable ? sort : 'createdAt'
+    const orderByDir = sortable ? sortDir : 'desc'
+
+    const count = await this.prisma.author.count({
+      ...(filter && {
+        where: {
+          OR: [
+            { name: { contains: filter, mode: 'insensitive' } },
+            { email: { contains: filter, mode: 'insensitive' } },
+          ],
+        },
+      }),
+    })
+
+    const authors = await this.prisma.author.findMany({
+      ...(filter && {
+        where: {
+          OR: [
+            { name: { contains: filter, mode: 'insensitive' } },
+            { email: { contains: filter, mode: 'insensitive' } },
+          ],
+        },
+      }),
+      orderBy: {
+        [orderByField]: orderByDir,
+      },
+      skip: page > 0 ? (page - 1) * perPage : 1,
+      take: perPage > 0 ? perPage : 15,
+    })
+
+    return {
+      items: authors,
+      currentPage: page,
+      perPage,
+      lastPage: Math.ceil(count / perPage),
+      total: count,
+    }
   }
 
   async get(id: string): Promise<Author> {
