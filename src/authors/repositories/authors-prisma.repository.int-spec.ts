@@ -81,5 +81,40 @@ describe('AuthorsPrismaRepository Integration Tests', () => {
         expect(`${item.email}${index + 1}@a.com`)
       })
     })
+
+    test('should apply pagination and ordering', async () => {
+      const createdAt = new Date()
+      const data = []
+      const arrange = 'badec'
+      arrange.split('').forEach((element, index) => {
+        const timestamp = createdAt.getTime() + index
+        data.push({
+          ...AuthorDataBuilder({ name: element }),
+          email: `author${index}@a.com`,
+          createdAt: new Date(timestamp),
+        })
+      })
+
+      await prisma.author.createMany({ data })
+      const result1 = await repository.search({
+        page: 1,
+        perPage: 2,
+        sort: 'name',
+        sortDir: 'asc',
+      })
+
+      expect(result1.items[0]).toMatchObject(data[1])
+      expect(result1.items[1]).toMatchObject(data[0])
+
+      const result2 = await repository.search({
+        page: 2,
+        perPage: 2,
+        sort: 'name',
+        sortDir: 'asc',
+      })
+
+      expect(result2.items[0]).toMatchObject(data[4])
+      expect(result2.items[1]).toMatchObject(data[2])
+    })
   })
 })
