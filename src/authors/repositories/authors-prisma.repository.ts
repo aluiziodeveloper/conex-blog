@@ -43,8 +43,10 @@ export class AuthorsPrismaRepository implements IAuthorsRepository {
     return await this.get(id)
   }
 
-  findByEmail(email: string): Promise<Author> {
-    throw new Error('Method not implemented.')
+  async findByEmail(email: string): Promise<Author> {
+    return this.prisma.author.findUnique({
+      where: { email },
+    })
   }
 
   async search(params: SearchParams): Promise<SearchResult> {

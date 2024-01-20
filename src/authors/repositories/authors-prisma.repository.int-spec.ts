@@ -98,6 +98,20 @@ describe('AuthorsPrismaRepository Integration Tests', () => {
     expect(result).toMatchObject(author)
   })
 
+  test('should return null when it does not find an author with the email provided', async () => {
+    const result = await repository.findByEmail('a@a.com')
+    expect(result).toBeNull()
+  })
+
+  test('should return a author in email search', async () => {
+    const data = AuthorDataBuilder({ email: 'a@a.com' })
+    const author = await prisma.author.create({ data })
+
+    const result = await repository.findByEmail('a@a.com')
+
+    expect(result).toMatchObject(author)
+  })
+
   describe('search method', () => {
     test('should only apply pagination when the parameters are null', async () => {
       const createdAt = new Date()
