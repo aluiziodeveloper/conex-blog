@@ -54,6 +54,31 @@ describe('AuthorsPrismaRepository Integration Tests', () => {
     expect(author).toMatchObject(data)
   })
 
+  test('should throws an error when updating a author not found', async () => {
+    const data = AuthorDataBuilder({})
+    const author = {
+      id: '796c5a25-1d3b-4228-9a75-06f416c6e218',
+      ...data,
+    }
+    await expect(repository.update(author)).rejects.toThrow(
+      new NotFoundError(
+        'Author not found using ID 796c5a25-1d3b-4228-9a75-06f416c6e218',
+      ),
+    )
+  })
+
+  test('should update a author', async () => {
+    const data = AuthorDataBuilder({})
+    const author = await prisma.author.create({ data })
+
+    const result = await repository.update({
+      ...author,
+      name: 'new name',
+    })
+
+    expect(result.name).toBe('new name')
+  })
+
   describe('search method', () => {
     test('should only apply pagination when the parameters are null', async () => {
       const createdAt = new Date()
