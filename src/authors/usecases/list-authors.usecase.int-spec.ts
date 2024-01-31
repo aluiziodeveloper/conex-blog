@@ -52,4 +52,51 @@ describe('ListAuthorsUsecase Integration Tests', () => {
       lastPage: 1,
     })
   })
+
+  test('should apply pagination, filter and ordering', async () => {
+    const createdAt = new Date()
+    const data = []
+    const arrange = ['test', 'a', 'TEST', 'b', 'Test']
+    arrange.forEach((element, index) => {
+      const timestamp = createdAt.getTime() + index
+      data.push({
+        ...AuthorDataBuilder({ name: element }),
+        email: `author${index}@a.com`,
+        createdAt: new Date(timestamp),
+      })
+    })
+
+    await prisma.author.createMany({ data })
+    const result1 = await usecase.execute({
+      page: 1,
+      perPage: 2,
+      sort: 'name',
+      sortDir: 'asc',
+      filter: 'TEST',
+    })
+
+    expect(result1).toMatchObject({
+      items: [data[0], data[4]],
+      total: 3,
+      currentPage: 1,
+      perPage: 2,
+      lastPage: 2,
+    })
+
+    const result2 = await usecase.execute({
+      page: 2,
+      perPage: 2,
+      sort: 'name',
+      sortDir: 'asc',
+      filter: 'TEST',
+    })
+
+    expect(result2).toMatchObject({
+      items: [data[2]],
+      total: 3,
+      currentPage: 2,
+      perPage: 2,
+      lastPage: 2,
+    })
+  })
 })

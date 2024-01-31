@@ -136,7 +136,7 @@ describe('AuthorsPrismaRepository Integration Tests', () => {
       })
 
       result.items.reverse().forEach((item, index) => {
-        expect(`${item.email}${index + 1}@a.com`)
+        expect(item.email).toEqual(`author${index + 1}@a.com`)
       })
     })
 
