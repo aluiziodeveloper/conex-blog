@@ -1,7 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { PrismaClient } from '@prisma/client'
 import { execSync } from 'node:child_process'
-import { NotFoundError } from '@/shared/errors/not-found-error'
 import { AuthorsPrismaRepository } from '../repositories/authors-prisma.repository'
 import { ListAuthorsUsecase } from './list-authors.usecase'
 import { AuthorDataBuilder } from '../helpers/author-data-builder'
