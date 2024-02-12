@@ -26,3 +26,12 @@ type Query {
   hello: String!
   authors(page: Int, perPage: Int, sort: String, sortDir: String, filter: String): SearchAuthorsResult!
 }
+
+type Mutation {
+  createAuthor(data: CreateAuthorInput!): Author!
+}
+
+input CreateAuthorInput {
+  name: String!
+  email: String!
+}
