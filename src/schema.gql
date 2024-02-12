@@ -14,7 +14,15 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type SearchAuthorsResult {
+  items: [Author!]!
+  currentPage: Int!
+  perPage: Int!
+  lastPage: Int!
+  total: Int!
+}
+
 type Query {
   hello: String!
-  authors: [Author!]!
+  authors(page: Int, perPage: Int, sort: String, sortDir: String, filter: String): SearchAuthorsResult!
 }
