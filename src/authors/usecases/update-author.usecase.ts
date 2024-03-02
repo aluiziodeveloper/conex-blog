@@ -32,7 +32,7 @@ export namespace UpdateAuthorUsecase {
         author.name = input.name
       }
 
-      return author
+      return this.authorsRepository.update(author)
     }
   }
 }
