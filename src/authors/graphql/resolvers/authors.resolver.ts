@@ -6,6 +6,8 @@ import { SearchParamsArgs } from '../args/search-params.args'
 import { SearchAuthorsResult } from '../models/search-authors-result'
 import { CreateAuthorUsecase } from '@/authors/usecases/create-author.usecase'
 import { CreateAuthorInput } from '../inputs/create-author.input'
+import { GetAuthorUsecase } from '@/authors/usecases/get-author.usecase'
+import { AuthorIdArgs } from '../args/author-id.args'
 
 @Resolver(() => Author)
 export class AuthorsResolver {
@@ -14,6 +16,9 @@ export class AuthorsResolver {
 
   @Inject(CreateAuthorUsecase.Usecase)
   private createAuthorUseCase: CreateAuthorUsecase.Usecase
+
+  @Inject(GetAuthorUsecase.Usecase)
+  private getAuthorUseCase: GetAuthorUsecase.Usecase
 
   @Query(() => SearchAuthorsResult)
   async authors(
@@ -27,6 +32,11 @@ export class AuthorsResolver {
       filter,
     })
     return list
+  }
+
+  @Query(() => Author)
+  async getAuthorById(@Args() { id }: AuthorIdArgs) {
+    return this.getAuthorUseCase.execute({ id })
   }
 
   @Mutation(() => Author)
