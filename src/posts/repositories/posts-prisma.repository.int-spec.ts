@@ -20,6 +20,7 @@ describe('PostsPrismaRepository Integration Tests', () => {
 
   beforeEach(async () => {
     await prisma.post.deleteMany()
+    await prisma.author.deleteMany()
   })
 
   afterAll(async () => {
@@ -61,5 +62,34 @@ describe('PostsPrismaRepository Integration Tests', () => {
 
     const result = await repository.create({ ...postData, authorId: author.id })
     expect(result).toMatchObject(postData)
+  })
+
+  test('should throws an error when updating a post not found', async () => {
+    const data = PostsDataBuilder({})
+    const post = {
+      ...data,
+      id: '796c5a25-1d3b-4228-9a75-06f416c6e218',
+      authorId: '796c5a25-1d3b-4228-9a75-06f416c6e218',
+    }
+    await expect(repository.update(post)).rejects.toThrow(
+      new NotFoundError(
+        'Post not found using ID 796c5a25-1d3b-4228-9a75-06f416c6e218',
+      ),
+    )
+  })
+
+  test('should update a post', async () => {
+    const postData = PostsDataBuilder({})
+    const authorData = AuthorDataBuilder({})
+    const author = await prisma.author.create({ data: authorData })
+
+    const post = await repository.create({ ...postData, authorId: author.id })
+    const result = await repository.update({
+      ...post,
+      published: true,
+      title: 'title-updated',
+    })
+    expect(result.published).toEqual(true)
+    expect(result.title).toEqual('title-updated')
   })
 })

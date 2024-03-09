@@ -11,8 +11,15 @@ export class PostsPrismaRepository implements PostsRepository {
     return post
   }
 
-  update(post: Post): Promise<Post> {
-    throw new Error('Method not implemented.')
+  async update(postParam: Post): Promise<Post> {
+    await this.get(postParam.id)
+    const post = await this.prismaService.post.update({
+      data: postParam,
+      where: {
+        id: postParam.id,
+      },
+    })
+    return post
   }
 
   async findById(id: string): Promise<Post> {
