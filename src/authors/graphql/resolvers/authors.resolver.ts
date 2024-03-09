@@ -10,6 +10,7 @@ import { GetAuthorUsecase } from '@/authors/usecases/get-author.usecase'
 import { AuthorIdArgs } from '../args/author-id.args'
 import { UpdateAuthorUsecase } from '@/authors/usecases/update-author.usecase'
 import { UpdateAuthorInput } from '../inputs/update-author.input'
+import { DeleteAuthorUsecase } from '@/authors/usecases/delete-author.usecase'
 
 @Resolver(() => Author)
 export class AuthorsResolver {
@@ -24,6 +25,9 @@ export class AuthorsResolver {
 
   @Inject(UpdateAuthorUsecase.Usecase)
   private updateAuthorUseCase: UpdateAuthorUsecase.Usecase
+
+  @Inject(DeleteAuthorUsecase.Usecase)
+  private deleteAuthorUseCase: DeleteAuthorUsecase.Usecase
 
   @Query(() => SearchAuthorsResult)
   async authors(
@@ -55,5 +59,10 @@ export class AuthorsResolver {
     @Args('data') data: UpdateAuthorInput,
   ) {
     return this.updateAuthorUseCase.execute({ id, ...data })
+  }
+
+  @Mutation(() => Author)
+  async deleteAuthor(@Args() { id }: AuthorIdArgs) {
+    return this.deleteAuthorUseCase.execute({ id })
   }
 }
