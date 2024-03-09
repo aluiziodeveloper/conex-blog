@@ -53,4 +53,13 @@ describe('PostsPrismaRepository Integration Tests', () => {
     const result = await repository.findById(post.id)
     expect(result).toStrictEqual(post)
   })
+
+  test('should create a post', async () => {
+    const postData = PostsDataBuilder({})
+    const authorData = AuthorDataBuilder({})
+    const author = await prisma.author.create({ data: authorData })
+
+    const result = await repository.create({ ...postData, authorId: author.id })
+    expect(result).toMatchObject(postData)
+  })
 })
