@@ -7,6 +7,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
 import path from 'node:path'
 import { AppResolver } from './app.resolver'
 import { AuthorsModule } from './authors/authors.module'
+import { PostsModule } from './posts/posts.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { AuthorsModule } from './authors/authors.module'
       autoSchemaFile: path.resolve(process.cwd(), 'src/schema.gql'),
     }),
     AuthorsModule,
+    PostsModule,
   ],
   providers: [AppService, AppResolver],
 })
