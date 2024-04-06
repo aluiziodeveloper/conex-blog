@@ -14,6 +14,7 @@ import { GetAuthorUsecase } from '@/authors/usecases/get-author.usecase'
 import { GetPostUseCase } from '@/posts/usecases/get-post.usecase'
 import { PostIdArgs } from '../args/post-id.args'
 import { PublishPostUseCase } from '@/posts/usecases/publish-post.usecase'
+import { UnpublishPostUseCase } from '@/posts/usecases/unpublish-post.usecase'
 
 @Resolver(() => Post)
 export class PostsResolver {
@@ -29,6 +30,9 @@ export class PostsResolver {
   @Inject(PublishPostUseCase.UseCase)
   private publishPostUseCase: PublishPostUseCase.UseCase
 
+  @Inject(UnpublishPostUseCase.UseCase)
+  private unpublishPostUseCase: UnpublishPostUseCase.UseCase
+
   @Query(() => Post)
   async getPostById(@Args() { id }: PostIdArgs) {
     return this.getPostUseCase.execute({ id })
@@ -42,6 +46,11 @@ export class PostsResolver {
   @Mutation(() => Post)
   async publishPost(@Args() { id }: PostIdArgs) {
     return this.publishPostUseCase.execute({ id })
+  }
+
+  @Mutation(() => Post)
+  async unpublishPost(@Args() { id }: PostIdArgs) {
+    return this.unpublishPostUseCase.execute({ id })
   }
 
   @ResolveField()
