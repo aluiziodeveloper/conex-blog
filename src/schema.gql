@@ -44,6 +44,7 @@ type Mutation {
   updateAuthor(id: String!, data: UpdateAuthorInput!): Author!
   deleteAuthor(id: String!): Author!
   createPost(data: CreatePostInput!): Post!
+  publishPost(id: String!): Post!
 }
 
 input CreateAuthorInput {
