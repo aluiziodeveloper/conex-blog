@@ -7,10 +7,12 @@ import { AuthorsPrismaRepository } from '@/authors/repositories/authors-prisma.r
 import { GetPostUseCase } from './usecases/get-post.usecase'
 import { PublishPostUseCase } from './usecases/publish-post.usecase'
 import { UnpublishPostUseCase } from './usecases/unpublish-post.usecase'
+import { PostsResolver } from './graphql/resolvers/posts.resolver'
 
 @Module({
   imports: [DatabaseModule],
   providers: [
+    PostsResolver,
     {
       provide: 'PrismaService',
       useClass: PrismaService,
