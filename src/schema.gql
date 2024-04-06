@@ -36,6 +36,7 @@ type Query {
   hello: String!
   authors(page: Int, perPage: Int, sort: String, sortDir: String, filter: String): SearchAuthorsResult!
   getAuthorById(id: String!): Author!
+  getPostById(id: String!): Post!
 }
 
 type Mutation {
