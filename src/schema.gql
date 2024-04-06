@@ -27,7 +27,7 @@ type Post {
   title: String!
   slug: String!
   content: String!
-  authorId: String!
+  author: Author!
   published: Boolean!
   createdAt: DateTime!
 }
