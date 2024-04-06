@@ -35,16 +35,10 @@ export namespace CreatePostUseCase {
 
       const post = await this.postsRepository.create({
         ...input,
+        published: false,
         slug,
       })
-      return {
-        id: post.id,
-        title: post.title,
-        content: post.content,
-        published: post.published,
-        authorId: post.authorId,
-        createdAt: post.createdAt,
-      }
+      return post as PostOutput
     }
   }
 }
